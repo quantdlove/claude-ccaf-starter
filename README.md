@@ -33,6 +33,7 @@ Example skill, rules, and command files showing the structure of each config typ
 |------|-----------|
 | [CCAF Exam Guide](docs/ccaf-exam-guide.pdf) | Anthropic's official exam guide. Domain weights, exam format, study topics. |
 | [Ambassador Deck](docs/ambassador-deck.html) | Slide deck from the Capital Factory presentation on CCAF architecture. Open in a browser or print to PDF. |
+| [Live Examples (GitHub Pages)](https://quantdlove.github.io/quiver-learn/) | Production training decks and filing guides built with CCAF patterns. Browse rendered output to see what finished architecture looks like. |
 
 ## The Five CCAF Domains
 

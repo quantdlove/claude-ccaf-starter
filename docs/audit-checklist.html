@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCAF Architecture Audit Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-page:#F2F2F7;
+    --bg-card:#F9F9FB;
+    --text:#1D1D1F;
+    --text2:#86868B;
+    --text3:#AEAEB2;
+    --accent:#FF1D58;
+    --green:#34C759;
+    --red:#FF3B30;
+    --blue:#007AFF;
+    --teal:#57D7BA;
+    --border:rgba(0,0,0,0.06);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html,body{
+    background:var(--bg-page);
+    color:var(--text);
+  }
+
+  body{
+    font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.55;
+  }
+
+  .container{
+    max-width:720px;
+    margin:0 auto;
+    padding:40px 24px 60px;
+  }
+
+  a{ color:var(--blue); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+
+  .backlink{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text2);
+    margin-bottom:24px;
+  }
+  .backlink:hover{ color:var(--blue); text-decoration:none; }
+  .backlink svg{ width:14px; height:14px; }
+
+  .eyebrow{
+    font-size:11px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+
+  h1{
+    font-size:32px;
+    font-weight:700;
+    letter-spacing:-0.03em;
+    line-height:1.1;
+    margin-bottom:12px;
+  }
+
+  .intro-text{
+    font-size:15px;
+    color:var(--text2);
+    line-height:1.6;
+    margin-bottom:8px;
+  }
+
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+    margin-bottom:8px;
+  }
+
+  .btn-download{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+    background:var(--bg-card);
+    border:0.5px solid var(--border);
+    border-radius:8px;
+    padding:8px 14px;
+  }
+  .btn-download:hover{ text-decoration:none; border-color:var(--blue); color:var(--blue); }
+  .btn-download svg{ width:14px; height:14px; }
+
+  section.card{
+    background:var(--bg);
+    border-radius:12px;
+    border:0.5px solid var(--border);
+    box-shadow:0 1px 8px rgba(0,0,0,0.03);
+    padding:24px 28px;
+    margin-bottom:16px;
+  }
+
+  h2{
+    font-size:14px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--text2);
+    margin-bottom:4px;
+  }
+
+  .domain-weight{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    color:var(--text3);
+    margin-bottom:16px;
+  }
+
+  h3{
+    font-size:15px;
+    font-weight:600;
+    margin-top:20px;
+    margin-bottom:10px;
+  }
+  h3:first-of-type{ margin-top:4px; }
+
+  p{
+    font-size:14px;
+    line-height:1.55;
+    color:var(--text);
+  }
+
+  .lead-p{
+    font-size:14px;
+    color:var(--text2);
+    margin-bottom:4px;
+  }
+
+  /* checklist item card */
+  .item{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    background:var(--bg-card);
+    border-radius:10px;
+    border-left:3px solid var(--border);
+    padding:12px 14px;
+    margin-bottom:8px;
+  }
+
+  .item .box{
+    flex:0 0 18px;
+    width:18px;
+    height:18px;
+    border-radius:5px;
+    border:1.5px solid var(--text3);
+    background:var(--bg);
+    margin-top:1px;
+  }
+
+  .item p{
+    font-size:13.5px;
+    line-height:1.5;
+    color:var(--text);
+  }
+
+  .item.redline{
+    border-left:3px solid var(--red);
+    background:#FFF5F4;
+  }
+  .item.redline .box{
+    border-color:var(--red);
+  }
+  .item.redline p{
+    font-weight:500;
+  }
+
+  .redline-tag{
+    display:inline-block;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:#fff;
+    background:var(--red);
+    border-radius:4px;
+    padding:2px 6px;
+    margin-right:8px;
+    vertical-align:middle;
+  }
+
+  .redline-heading{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:24px;
+    margin-bottom:10px;
+  }
+  .redline-heading .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--red);
+    flex:0 0 8px;
+  }
+  .redline-heading h3{
+    margin:0;
+    color:var(--red);
+  }
+
+  .how-to-list{
+    list-style:none;
+    counter-reset:step;
+    margin-top:12px;
+  }
+  .how-to-list li{
+    counter-increment:step;
+    position:relative;
+    padding-left:32px;
+    font-size:14px;
+    margin-bottom:10px;
+    line-height:1.5;
+  }
+  .how-to-list li::before{
+    content:counter(step);
+    position:absolute;
+    left:0;
+    top:0;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:var(--bg-card);
+    border:0.5px solid var(--border);
+    color:var(--text2);
+    font-size:12px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .how-to-list li strong{ font-weight:600; }
+
+  /* scoring section */
+  .score-card{
+    background:var(--bg);
+    border-radius:12px;
+    border:0.5px solid var(--border);
+    box-shadow:0 1px 8px rgba(0,0,0,0.03);
+    padding:24px 28px;
+    margin-bottom:16px;
+  }
+
+  .score-instructions{
+    font-size:13px;
+    color:var(--text2);
+    margin-bottom:18px;
+  }
+
+  .score-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:8px;
+  }
+  .score-table th{
+    text-align:left;
+    font-size:11px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--text3);
+    padding:8px 6px;
+    border-bottom:1px solid var(--border);
+  }
+  .score-table td{
+    font-size:13.5px;
+    padding:10px 6px;
+    border-bottom:1px solid var(--border);
+    vertical-align:middle;
+  }
+  .score-table tr:last-child td{ border-bottom:none; }
+
+  .score-input{
+    width:56px;
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    text-align:center;
+    color:var(--text);
+    background:var(--bg-card);
+    border:0.5px solid var(--border);
+    border-radius:6px;
+    padding:6px 4px;
+  }
+  .score-input:focus{
+    outline:none;
+    border-color:var(--blue);
+  }
+
+  .weight-pill{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    color:var(--text2);
+    background:var(--bg-page);
+    border-radius:20px;
+    padding:3px 9px;
+  }
+
+  .formula-box{
+    background:var(--bg-card);
+    border:0.5px solid var(--border);
+    border-radius:10px;
+    padding:16px 18px;
+    margin-top:16px;
+    font-size:13px;
+    color:var(--text2);
+    line-height:1.6;
+  }
+  .formula-box code{
+    display:block;
+    font-family:'SF Mono', Consolas, monospace;
+    font-size:12.5px;
+    color:var(--text);
+    background:var(--bg);
+    border-radius:6px;
+    padding:10px 12px;
+    margin-top:8px;
+    overflow-x:auto;
+  }
+
+  .target-banner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    background:#0f0f0f;
+    border-radius:10px;
+    padding:16px 20px;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  .target-banner .label{
+    font-size:12px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:#AEAEB2;
+  }
+  .target-banner .value{
+    font-size:22px;
+    font-weight:700;
+    color:#fff;
+  }
+  .target-banner .value span{
+    color:var(--teal);
+  }
+
+  .redline-banner{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#FFF5F4;
+    border:0.5px solid rgba(255,59,48,0.25);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-top:16px;
+    font-size:13px;
+    color:var(--text);
+  }
+  .redline-banner strong{ color:var(--red); }
+
+  footer{
+    text-align:center;
+    padding:32px 0 8px;
+    font-size:12px;
+    color:var(--text3);
+  }
+  footer a{ color:var(--text2); font-weight:600; }
+
+  hr.rule{
+    border:none;
+    border-top:1px solid var(--border);
+    margin:20px 0;
+  }
+
+  @media (max-width:480px){
+    h1{ font-size:26px; }
+    section.card, .score-card{ padding:18px 18px; }
+    .container{ padding:24px 16px 48px; }
+    .score-table th:nth-child(2), .score-table td:nth-child(2){ display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="backlink" href="../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    Back to Starter Kit
+  </a>
+
+  <div class="eyebrow">CCAF Architecture Starter Kit</div>
+  <h1>CCAF Architecture Audit Checklist</h1>
+  <p class="intro-text">Use this checklist to audit any Claude-powered system against the five CCAF domains. Each item is pass, fail, or not applicable. A single red line failure means the system is not production ready yet, even if the overall score looks good.</p>
+
+  <div class="toolbar">
+    <a class="btn-download" href="audit-checklist.md" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Download markdown version
+    </a>
+  </div>
+
+  <section class="card">
+    <h2>How to Use</h2>
+    <p class="lead-p">Run this checklist at three points in a system's life.</p>
+    <ol class="how-to-list">
+      <li><strong>Before launch.</strong> Full audit of all five domains.</li>
+      <li><strong>After any architecture change.</strong> Audit the domains that were affected.</li>
+      <li><strong>Quarterly review.</strong> Full audit again to catch drift that crept in over time.</li>
+    </ol>
+    <p class="lead-p" style="margin-top:14px;">Score each item PASS, FAIL, or N/A if it does not apply to your system.</p>
+  </section>
+
+  <!-- D1 -->
+  <section class="card">
+    <h2>D1: Agentic Architecture</h2>
+    <span class="domain-weight">27% of exam</span>
+
+    <h3>Pipeline Design</h3>
+    <div class="item"><div class="box"></div><p>Every multi-step workflow has an explicit architecture pattern (sequential, parallel, orchestrator-worker, or evaluator-optimizer). You can name it.</p></div>
+    <div class="item"><div class="box"></div><p>Agent pipelines use async handoff via shared-state files, not in-memory passing between agents.</p></div>
+    <div class="item"><div class="box"></div><p>Each agent in a pipeline has a single responsibility. No agent does "research and enrich and classify and notify."</p></div>
+    <div class="item"><div class="box"></div><p>Pipeline stages are ordered. You can draw the DAG. If you can't, the architecture is implicit, which is a failure.</p></div>
+
+    <h3>Tiered Autonomy</h3>
+    <div class="item"><div class="box"></div><p>Every agent action is classified into an autonomy tier: auto-act, recommend, or escalate.</p></div>
+    <div class="item"><div class="box"></div><p>Customer-facing outputs have a human review gate before shipping. No exceptions.</p></div>
+    <div class="item"><div class="box"></div><p>Tier boundaries are explicit in the agent's instructions, not emergent from prompt behavior.</p></div>
+
+    <h3>State Management</h3>
+    <div class="item"><div class="box"></div><p>Shared state between agents uses files (JSON, markdown), not conversation context.</p></div>
+    <div class="item"><div class="box"></div><p>State files have a defined schema. New fields are documented before agents populate them.</p></div>
+    <div class="item"><div class="box"></div><p>Derived state is rebuilt from source data, not maintained independently. If the source changes, derived state self-heals on the next run.</p></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines (automatic fail)</h3></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>No implicit architecture. If you can't name the pattern, it doesn't have one.</p></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>No bidirectional agent dependencies. Agent A depends on B depends on A is circular. Redesign it.</p></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>No agents writing to sources of truth they don't own. One authoritative writer per state file. Everyone else is a courtesy writer at best.</p></div>
+  </section>
+
+  <!-- D2 -->
+  <section class="card">
+    <h2>D2: Tool Design and MCP</h2>
+    <span class="domain-weight">18% of exam</span>
+
+    <h3>Tool Selection</h3>
+    <div class="item"><div class="box"></div><p>Every tool call in the system uses the right tool for the job. Semantic search for discovery, structured queries for enumeration. Never semantic search for enumeration, it produces false negatives.</p></div>
+    <div class="item"><div class="box"></div><p>MCP tools are discovered fresh at session start. Tool lists change when engineers push updates.</p></div>
+    <div class="item"><div class="box"></div><p>Pagination is handled explicitly. Default limits are overridden for small, finite datasets.</p></div>
+
+    <h3>Transport Architecture</h3>
+    <div class="item"><div class="box"></div><p>Tool transport (HTTP vs stdio, MCP vs REST API) is separated from business logic. Swapping transport doesn't change agent behavior.</p></div>
+    <div class="item"><div class="box"></div><p>Authentication boundaries are documented. Which tools need OAuth? Which use API keys? Which are unauthenticated?</p></div>
+    <div class="item"><div class="box"></div><p>Security-sensitive tools (Stripe, payment systems) use a two-hop pattern: human-triggered at the credential boundary, agents consume the output.</p></div>
+
+    <h3>Error Handling</h3>
+    <div class="item"><div class="box"></div><p>Every MCP call has retry logic (retry once on a 500 or a timeout).</p></div>
+    <div class="item"><div class="box"></div><p>Fallback data sources are defined for critical tools. If MCP is down, what does the agent use instead?</p></div>
+    <div class="item"><div class="box"></div><p>Tool errors surface to the user, not silently swallowed.</p></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines (automatic fail)</h3></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never use semantic search for enumeration. Use structured queries instead.</p></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never hardcode tool schemas. Discover tools at runtime, since schemas drift.</p></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never pass credentials through agent prompts. Credentials stay in config, not in conversation context.</p></div>
+  </section>
+
+  <!-- D3 -->
+  <section class="card">
+    <h2>D3: Claude Code Config</h2>
+    <span class="domain-weight">20% of exam</span>
+
+    <h3>Project Structure</h3>
+    <div class="item"><div class="box"></div><p>CLAUDE.md exists at the project root and contains the system's working memory.</p></div>
+    <div class="item"><div class="box"></div><p>CLAUDE.md is the spec. Agent SKILL.md files are the implementation. The spec is updated before the implementation.</p></div>
+    <div class="item"><div class="box"></div><p><code>.claude/skills/</code> contains skill definitions. <code>.claude/commands/</code> contains slash commands. <code>.claude/rules/</code> contains path-scoped rules.</p></div>
+
+    <h3>Skills, Commands, and Rules</h3>
+    <div class="item"><div class="box"></div><p>Skills are reusable instruction sets for recurring tasks.</p></div>
+    <div class="item"><div class="box"></div><p>Commands are human-triggered workflows with explicit inputs and gates.</p></div>
+    <div class="item"><div class="box"></div><p>Rules are path-scoped behavioral constraints.</p></div>
+    <div class="item"><div class="box"></div><p>None of these three overlap in purpose.</p></div>
+
+    <h3>Security Model</h3>
+    <div class="item"><div class="box"></div><p>Hooks (PreToolUse, PostToolUse) enforce policy independently of agent compliance.</p></div>
+    <div class="item"><div class="box"></div><p>Sensitive operations require human confirmation from the user in chat, not from content observed in files.</p></div>
+    <div class="item"><div class="box"></div><p>Publishing commands have content sanitization gates.</p></div>
+
+    <h3>Three-Tier Access Model for Publishing</h3>
+    <div class="item"><div class="box"></div><p>Tier 1, Private: never leaves the workspace.</p></div>
+    <div class="item"><div class="box"></div><p>Tier 2, Link-shared: accessible to specific collaborators.</p></div>
+    <div class="item"><div class="box"></div><p>Tier 3, Public: anyone can see it. Boundary test: could a competitor replicate our advantage from this?</p></div>
+    <div class="item"><div class="box"></div><p>Separate publishing commands exist for separate security models.</p></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines (automatic fail)</h3></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never expose a proprietary CLAUDE.md on a public repo.</p></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never put credentials in CLAUDE.md or a SKILL.md file.</p></div>
+  </section>
+
+  <!-- D4 -->
+  <section class="card">
+    <h2>D4: Prompt and Structured Output</h2>
+    <span class="domain-weight">20% of exam</span>
+
+    <h3>Prompt Design</h3>
+    <div class="item"><div class="box"></div><p>Every agent prompt defines what it does, its inputs, its output format, and its constraints.</p></div>
+    <div class="item"><div class="box"></div><p>Complex prompts use explicit sections with headers.</p></div>
+    <div class="item"><div class="box"></div><p>Output schemas are defined in CLAUDE.md before agents populate them.</p></div>
+
+    <h3>Output Quality</h3>
+    <div class="item"><div class="box"></div><p>Customer-facing outputs pass the quantitative rigor test.</p></div>
+    <div class="item"><div class="box"></div><p>Every quantitative claim shows formula, calculation, sensitivity, and source.</p></div>
+    <div class="item"><div class="box"></div><p>Data freshness is disclosed on every data-driven output.</p></div>
+
+    <h3>Delivery Format</h3>
+    <div class="item"><div class="box"></div><p>Output format matches delivery context: PDF gets a fixed canvas, dashboards scroll, email uses inline CSS.</p></div>
+    <div class="item"><div class="box"></div><p>Theming overrides CSS variables instead of forking the stylesheet.</p></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines (automatic fail)</h3></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never ship an unverified quantitative claim.</p></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never promise content that doesn't exist, like a "full breakdown below" with no breakdown.</p></div>
+  </section>
+
+  <!-- D5 -->
+  <section class="card">
+    <h2>D5: Context and Reliability</h2>
+    <span class="domain-weight">15% of exam</span>
+
+    <h3>Source of Truth</h3>
+    <div class="item"><div class="box"></div><p>Every piece of data has one source of truth.</p></div>
+    <div class="item"><div class="box"></div><p>Formula fields in databases are read, never recalculated.</p></div>
+    <div class="item"><div class="box"></div><p>When sources conflict, the hierarchy for resolving that conflict is explicit.</p></div>
+
+    <h3>Failure Modes</h3>
+    <div class="item"><div class="box"></div><p>Silent data loss is the worst failure pattern. Agents that fail silently are architecture bugs, not edge cases.</p></div>
+    <div class="item"><div class="box"></div><p>Circuit breakers exist for external dependencies.</p></div>
+    <div class="item"><div class="box"></div><p>Operations are idempotent. Bulk writes check for existing records before creating duplicates.</p></div>
+
+    <h3>Disclosure and Transparency</h3>
+    <div class="item"><div class="box"></div><p>Data freshness is disclosed on every data-driven output.</p></div>
+    <div class="item"><div class="box"></div><p>Numbers in published materials are floor-rounded for durability.</p></div>
+    <div class="item"><div class="box"></div><p>Disclosure boundaries are explicit.</p></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines (automatic fail)</h3></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Silent failures are architecture bugs.</p></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never recalculate formula fields.</p></div>
+    <div class="item redline"><div class="box"></div><p><span class="redline-tag">Red line</span>Never maintain the same data in two places.</p></div>
+  </section>
+
+  <!-- Scoring -->
+  <div class="score-card">
+    <h2>Scoring</h2>
+    <p class="score-instructions">Count your PASS items per domain. Divide by total applicable items, excluding N/A. Type your score into each box below.</p>
+
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>Items</th>
+          <th>Your score</th>
+          <th>Weight</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>D1 Agentic Architecture</td>
+          <td>/13</td>
+          <td><input class="score-input" type="text" placeholder="0" inputmode="numeric"> / 13</td>
+          <td><span class="weight-pill">27%</span></td>
+        </tr>
+        <tr>
+          <td>D2 Tool Design and MCP</td>
+          <td>/9</td>
+          <td><input class="score-input" type="text" placeholder="0" inputmode="numeric"> / 9</td>
+          <td><span class="weight-pill">18%</span></td>
+        </tr>
+        <tr>
+          <td>D3 Claude Code Config</td>
+          <td>/14</td>
+          <td><input class="score-input" type="text" placeholder="0" inputmode="numeric"> / 14</td>
+          <td><span class="weight-pill">20%</span></td>
+        </tr>
+        <tr>
+          <td>D4 Prompt and Output</td>
+          <td>/10</td>
+          <td><input class="score-input" type="text" placeholder="0" inputmode="numeric"> / 10</td>
+          <td><span class="weight-pill">20%</span></td>
+        </tr>
+        <tr>
+          <td>D5 Context and Reliability</td>
+          <td>/10</td>
+          <td><input class="score-input" type="text" placeholder="0" inputmode="numeric"> / 10</td>
+          <td><span class="weight-pill">15%</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="redline-banner">
+      <span>&#9888;</span>
+      <span>Any red line failure means the system is <strong>not production-ready</strong>, regardless of the overall score.</span>
+    </div>
+
+    <div class="formula-box">
+      Weighted score formula, projected out of 1000:
+      <code>(D1% &times; 0.27) + (D2% &times; 0.18) + (D3% &times; 0.20) + (D4% &times; 0.20) + (D5% &times; 0.15)</code>
+    </div>
+
+    <div class="target-banner">
+      <span class="label">Target to pass</span>
+      <span class="value"><span>720</span> / 1000</span>
+    </div>
+  </div>
+
+  <footer>
+    Part of the <a href="../index.html">CCAF Architecture Starter Kit</a>
+  </footer>
+
+</div>
+</body>
+</html>

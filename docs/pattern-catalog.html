@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCAF Architecture Pattern Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --bg-page: #F2F2F7;
+    --bg-card: #F9F9FB;
+    --text: #1D1D1F;
+    --text2: #86868B;
+    --text3: #AEAEB2;
+    --accent: #FF1D58;
+    --green: #34C759;
+    --red: #FF3B30;
+    --blue: #007AFF;
+    --teal: #57D7BA;
+    --border: rgba(0,0,0,0.06);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg-page);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    text-decoration: none;
+    margin-bottom: 24px;
+  }
+  .back-link:hover { color: var(--text); }
+
+  .page-header {
+    margin-bottom: 28px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0 0 12px;
+  }
+
+  .intro {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text2);
+    margin: 0 0 4px;
+  }
+
+  .download-row {
+    margin-top: 16px;
+  }
+  .download-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: underline;
+  }
+
+  section.card {
+    background: var(--bg);
+    border-radius: 12px;
+    border: 0.5px solid var(--border);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+
+  section.card.quickref {
+    padding: 24px 28px 28px;
+  }
+
+  h2 {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+    margin: 0 0 4px;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 20px 0 8px;
+    color: var(--text);
+  }
+  h3:first-of-type { margin-top: 14px; }
+
+  p {
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0 0 8px;
+    color: var(--text);
+  }
+
+  .pattern-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .pattern-title-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .pattern-title {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  pre {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: "SF Mono", "Courier New", ui-monospace, monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text);
+    margin: 10px 0 16px;
+    white-space: pre;
+  }
+
+  code {
+    font-family: "SF Mono", "Courier New", ui-monospace, monospace;
+    background: var(--bg-card);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 12.5px;
+  }
+
+  ul.key-rules {
+    margin: 0 0 16px;
+    padding-left: 20px;
+  }
+  ul.key-rules li {
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+
+  .domains {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0 16px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .pill.d1 { background: rgba(0,122,255,0.1); color: var(--blue); }
+  .pill.d2 { background: rgba(87,215,186,0.15); color: #2AA88C; }
+  .pill.d3 { background: rgba(255,29,88,0.1); color: var(--accent); }
+  .pill.d4 { background: rgba(52,199,89,0.12); color: #248A3D; }
+  .pill.d5 { background: rgba(174,174,178,0.2); color: #6E6E73; }
+
+  .antipattern {
+    border-left: 3px solid var(--red);
+    background: #FFF6F5;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-top: 4px;
+  }
+  .antipattern p {
+    margin: 0;
+  }
+  .antipattern .label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+
+  .problem-label, .arch-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+
+  table.quickref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 8px;
+  }
+  table.quickref-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text2);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  table.quickref-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+    vertical-align: top;
+  }
+  table.quickref-table tr:last-child td {
+    border-bottom: none;
+  }
+  table.quickref-table td.pattern-col {
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 2px solid var(--accent);
+    width: 32px;
+    margin: 0 0 16px;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 20px;
+    font-size: 12px;
+    color: var(--text3);
+  }
+  footer a {
+    color: var(--blue);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 28px 16px 48px; }
+    h1 { font-size: 26px; }
+    section.card { padding: 20px 18px; }
+    pre { font-size: 11.5px; padding: 12px; }
+    table.quickref-table { font-size: 12px; }
+    table.quickref-table th, table.quickref-table td { padding: 8px 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-link" href="../index.html">&larr; Back to index</a>
+
+  <div class="page-header">
+    <p class="eyebrow">CCAF Architecture Starter Kit</p>
+    <h1>CCAF Architecture Pattern Catalog</h1>
+    <p class="intro">Eight production-tested patterns for Claude-powered systems. Each one covers the problem it solves, the architecture, how it maps to the CCAF domains, and how to build it.</p>
+    <div class="download-row">
+      <a class="download-link" href="pattern-catalog.md" download>Download the markdown version</a>
+    </div>
+  </div>
+
+  <!-- Pattern 1 -->
+  <section class="card">
+    <div class="pattern-title-row">
+      <span class="pattern-number">1</span>
+      <span class="pattern-title">Sequential Pipeline with Async Handoff</span>
+    </div>
+    <p class="problem-label">Problem</p>
+    <p>Multi-agent workflows where each stage depends on the previous stage's output. Running them in parallel causes race conditions. Running them synchronously in one conversation burns context.</p>
+    <p class="arch-label">Architecture</p>
+    <p>Each agent runs independently on a schedule. Agents communicate via shared-state files (JSON or markdown), not conversation context. Agent A writes its output to a file. Agent B reads that file on its next run.</p>
+    <pre>Agent 1 (6am) &rarr; writes .handoff.json
+Agent 2 (5pm) &rarr; reads .handoff.json &rarr; writes .digest.json
+Agent 3 (7:30am next day) &rarr; reads .digest.json &rarr; writes .ledger.json
+Agent 4 (8am) &rarr; reads .ledger.json &rarr; writes to database</pre>
+    <h3>Key rules</h3>
+    <ul class="key-rules">
+      <li>Agents are loosely coupled. Each can fail independently without crashing the pipeline.</li>
+      <li>Shared-state files have defined schemas. New fields are documented before agents populate them.</li>
+      <li>Pipeline stages are ordered. You can draw the DAG.</li>
+    </ul>
+    <div class="domains">
+      <span class="pill d1">D1 Pipeline architecture</span>
+      <span class="pill d5">D5 Shared state as source of truth</span>
+    </div>
+    <div class="antipattern">
+      <span class="label">Anti-pattern</span>
+      <p>Putting all four stages in one agent prompt. Context window fills up, later stages get worse outputs, and a failure in stage 2 kills stages 3 and 4.</p>
+    </div>
+  </section>
+
+  <!-- Pattern 2 -->
+  <section class="card">
+    <div class="pattern-title-row">
+      <span class="pattern-number">2</span>
+      <span class="pattern-title">Two-Hop Security Boundary</span>
+    </div>
+    <p class="problem-label">Problem</p>
+    <p>Your CEO blocked automated access to a sensitive system (payment processor, banking API, credential store). But downstream agents need data from that system.</p>
+    <p class="arch-label">Architecture</p>
+    <p>Split into two hops with a human trigger at the security boundary.</p>
+    <pre>Hop 1: Human triggers a snapshot (Claude Code with credentials)
+  &rarr; Reads sensitive system
+  &rarr; Writes sanitized output to a shared file
+
+Hop 2: Automated agent reads the shared file
+  &rarr; Processes data
+  &rarr; Writes to downstream systems (database, dashboard)</pre>
+    <h3>Key rules</h3>
+    <ul class="key-rules">
+      <li>Hop 1 is human-triggered. No automated credential use.</li>
+      <li>The shared file contains processed data, not raw credentials or PII.</li>
+      <li>If the security policy changes later, swap Hop 1 to a live query. No logic change in Hop 2.</li>
+    </ul>
+    <div class="domains">
+      <span class="pill d3">D3 Human-triggered at credential boundary</span>
+      <span class="pill d2">D2 Transport-agnostic design</span>
+    </div>
+    <div class="antipattern">
+      <span class="label">Anti-pattern</span>
+      <p>Embedding API keys in agent prompts to bypass the security boundary. One leaked conversation means compromised credentials.</p>
+    </div>
+  </section>
+
+  <!-- Pattern 3 -->
+  <section class="card">
+    <div class="pattern-title-row">
+      <span class="pattern-number">3</span>
+      <span class="pattern-title">Circuit Breaker for OAuth Dependencies</span>
+    </div>
+    <p class="problem-label">Problem</p>
+    <p>Scheduled agents depend on external services (Slack, Notion, CRM) via OAuth tokens. Tokens expire. Non-interactive scheduled sessions cannot re-authenticate. When tokens expire, the entire pipeline fails silently for weeks.</p>
+    <p class="arch-label">Architecture</p>
+    <p>Every agent that calls an OAuth-dependent service starts with a canary call. If auth fails, the agent enters degraded mode.</p>
+    <pre>Normal mode:
+  Agent &rarr; calls Slack API &rarr; posts digest &rarr; done
+
+Degraded mode (auth expired):
+  Agent &rarr; canary call fails
+  Agent &rarr; writes output to local fallback file
+  Agent &rarr; writes failure to .auth-status.json
+  Agent &rarr; sends alert via separate channel (email, different service)
+  Agent &rarr; stops Slack-dependent work, continues local work</pre>
+    <h3>Key rules</h3>
+    <ul class="key-rules">
+      <li>The canary call is the first external call in every agent run.</li>
+      <li>Alerts go through a separate auth boundary. If your alert channel uses the same auth as your failed channel, you've built a single point of failure.</li>
+      <li><code>.auth-status.json</code> tracks consecutive failures. A monitoring agent reads this and surfaces stale auth warnings.</li>
+      <li>Recovery is human-triggered: open an interactive session, then run a backfill command.</li>
+    </ul>
+    <div class="domains">
+      <span class="pill d5">D5 Silent failure is the worst pattern</span>
+      <span class="pill d3">D3 Human-triggered recovery</span>
+      <span class="pill d1">D1 Graceful degradation</span>
+    </div>
+    <div class="antipattern">
+      <span class="label">Anti-pattern</span>
+      <p>No canary check. The agent silently fails for 33 days. Nobody notices because the failure is silent. Data loss accumulates.</p>
+    </div>
+  </section>
+
+  <!-- Pattern 4 -->
+  <section class="card">
+    <div class="pattern-title-row">
+      <span class="pattern-number">4</span>
+      <span class="pattern-title">Human Gate with Tiered Autonomy</span>
+    </div>
+    <p class="problem-label">Problem</p>
+    <p>Some agent actions are safe to auto-execute. Others need human approval. Others need a specific senior person's approval. Treating all actions the same either creates bottlenecks or risks.</p>
+    <p class="arch-label">Architecture</p>
+    <p>Classify every agent action into one of three tiers.</p>
+    <pre>Tier 1 (Auto-act): Agent executes without asking.
+  Examples: filter personal emails, classify by keyword, update cache files.
+
+Tier 2 (Recommend): Agent researches, writes recommendation, human confirms.
+  Examples: qualify a sales lead, draft an outreach email, suggest content changes.
+
+Tier 3 (Escalate): Agent flags for senior decision-maker review.
+  Examples: pricing decisions, deals above a threshold, compliance-sensitive content.</pre>
+    <h3>Key rules</h3>
+    <ul class="key-rules">
+      <li>Tier classification is explicit in the agent's instructions, not emergent from prompt behavior.</li>
+      <li>Human verdicts are logged with timestamps for an audit trail.</li>
+      <li>Agents cannot regress human decisions. Only humans change terminal states.</li>
+      <li>Reviewer hierarchy is explicit: who supersedes whom on conflicts.</li>
+    </ul>
+    <div class="domains">
+      <span class="pill d1">D1 Tiered autonomy</span>
+      <span class="pill d3">D3 Human-triggered at decision boundaries</span>
+      <span class="pill d5">D5 Audit trail</span>
+    </div>
+    <div class="antipattern">
+      <span class="label">Anti-pattern</span>
+      <p>Putting tier logic in a single prompt with "if X then auto-act, if Y then ask." Separate tiers should be separate code paths.</p>
+    </div>
+  </section>
+
+  <!-- Pattern 5 -->
+  <section class="card">
+    <div class="pattern-title-row">
+      <span class="pattern-number">5</span>
+      <span class="pattern-title">Self-Healing Derived State</span>
+    </div>
+    <p class="problem-label">Problem</p>
+    <p>A dashboard or index needs to show "all active deals." If you maintain this list manually, it drifts. Deals get added directly to the database, the index doesn't know, and the dashboard shows stale data.</p>
+    <p class="arch-label">Architecture</p>
+    <p>The index is derived, not maintained. A scheduled agent rebuilds it from scratch on every run.</p>
+    <pre>Every Agent 4 run:
+  1. Query database: filter by status IN (active statuses)
+  2. Build complete index from query results
+  3. Overwrite the index file
+
+Result: manually-added items appear automatically on next run.
+No sync logic. No "add to index when created." Just rebuild.</pre>
+    <h3>Key rules</h3>
+    <ul class="key-rules">
+      <li>One authoritative writer rebuilds the full index. Other agents may write courtesy updates.</li>
+      <li>Use structured database queries (deterministic), not semantic search (probabilistic, false negatives).</li>
+      <li>The rebuild is idempotent. Running it twice produces the same result.</li>
+    </ul>
+    <div class="domains">
+      <span class="pill d1">D1 Derived state over maintained state</span>
+      <span class="pill d2">D2 Query vs search tool selection</span>
+      <span class="pill d5">D5 Self-healing</span>
+    </div>
+    <div class="antipattern">
+      <span class="label">Anti-pattern</span>
+      <p>Maintaining the index by listening for events. Event listeners miss events. Manual edits bypass listeners. The index drifts silently.</p>
+    </div>
+  </section>
+
+  <!-- Pattern 6 -->
+  <section class="card">
+    <div class="pattern-title-row">
+      <span class="pattern-number">6</span>
+      <span class="pattern-title">Overwrite vs. Archive Tracks</span>
+    </div>
+    <p class="problem-label">Problem</p>
+    <p>Scheduled agents generate files. Some should replace the previous version. Others should be preserved as historical records. Without this distinction, date-stamped files accumulate.</p>
+    <p class="arch-label">Architecture</p>
+    <p>Every generated file follows one of two tracks.</p>
+    <pre>Track 1: OVERWRITE (recurring outputs)
+  - Single canonical filename, no date suffix
+  - Each run overwrites the previous version
+  - Examples: standup-deck-latest.html, dashboard.html
+
+Track 2: ARCHIVE (historical records)
+  - Date-stamped filename, keep all editions
+  - Each is a unique record worth preserving
+  - Examples: weekly-report-2026-07-10.html, newsletter-edition-2026-07-14/</pre>
+    <p><strong>Decision test:</strong> will next week's version replace this one? Yes = Track 1. No = Track 2.</p>
+    <h3>Key rules</h3>
+    <ul class="key-rules">
+      <li>When overwriting a Track 1 file, check for and delete old date-suffixed versions.</li>
+      <li>Working drafts stay in a scratch folder until final.</li>
+      <li>Track 1 files have predictable names for stable bookmarks.</li>
+    </ul>
+    <div class="domains">
+      <span class="pill d1">D1 File lifecycle architecture</span>
+      <span class="pill d5">D5 Cleanup prevents monotonic folder growth</span>
+    </div>
+    <div class="antipattern">
+      <span class="label">Anti-pattern</span>
+      <p>Every run creates a new dated file. After three months you have 60+ files. Nobody knows which is current.</p>
+    </div>
+  </section>
+
+  <!-- Pattern 7 -->
+  <section class="card">
+    <div class="pattern-title-row">
+      <span class="pattern-number">7</span>
+      <span class="pattern-title">Billboard Mode (Delivery-Context Overrides)</span>
+    </div>
+    <p class="problem-label">Problem</p>
+    <p>Your slide deck CSS works on a laptop but is unreadable projected to a 250-person venue.</p>
+    <p class="arch-label">Architecture</p>
+    <p>Override CSS variables for the delivery context. Don't fork the stylesheet.</p>
+    <pre>Base CSS (screen):
+  --h1-size: 36px
+  --text-color: #333333
+  --text-secondary: #6e6e73
+
+Billboard overrides (projection):
+  --h1-size: 56px
+  --text-color: #000000
+  --text-secondary: #333333</pre>
+    <h3>Key rules</h3>
+    <ul class="key-rules">
+      <li>Scale up 30 to 40 percent for projected presentations.</li>
+      <li>Replace gray text with a black scale for projection.</li>
+      <li>One headline and one key visual per slide.</li>
+    </ul>
+    <div class="domains">
+      <span class="pill d3">D3 Config overrides for delivery context</span>
+      <span class="pill d4">D4 Output format matches delivery</span>
+    </div>
+    <div class="antipattern">
+      <span class="label">Anti-pattern</span>
+      <p>Creating a separate "presentation version" CSS file. Now you maintain two stylesheets that drift apart.</p>
+    </div>
+  </section>
+
+  <!-- Pattern 8 -->
+  <section class="card">
+    <div class="pattern-title-row">
+      <span class="pattern-number">8</span>
+      <span class="pattern-title">Two-Layer Read Pattern</span>
+    </div>
+    <p class="problem-label">Problem</p>
+    <p>You need to display "all active deals" in a dashboard. Semantic search seems obvious but returns false negatives: deals silently disappear.</p>
+    <p class="arch-label">Architecture</p>
+    <p>Separate "which items exist" from "what are the details."</p>
+    <pre>Layer 1 (enumeration): Structured database query returns all item IDs
+  &rarr; query-database(filter: {status IN [active statuses]})
+  &rarr; Returns: list of page IDs + basic metadata
+
+Layer 2 (detail): Fetch each item by known ID
+  &rarr; get-page(id: known_page_id)
+  &rarr; Returns: full item data</pre>
+    <h3>Key rules</h3>
+    <ul class="key-rules">
+      <li>Layer 1 uses a structured query. Never semantic search.</li>
+      <li>Layer 2 fetches by known ID, so there's zero ambiguity.</li>
+      <li>A scheduled agent refreshes the Layer 1 index periodically.</li>
+    </ul>
+    <div class="domains">
+      <span class="pill d2">D2 Structured query vs semantic search</span>
+      <span class="pill d5">D5 Eliminating silent data loss</span>
+    </div>
+    <div class="antipattern">
+      <span class="label">Anti-pattern</span>
+      <p><code>search("active deals")</code>. Works 90 percent of the time. The 10 percent it misses are the deals you forget to follow up on.</p>
+    </div>
+  </section>
+
+  <!-- Quick reference -->
+  <section class="card quickref">
+    <hr class="divider">
+    <h2>Quick reference: which pattern when?</h2>
+    <table class="quickref-table">
+      <thead>
+        <tr>
+          <th>Situation</th>
+          <th>Pattern</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Multi-agent workflow with ordered stages</td>
+          <td class="pattern-col">1. Sequential Pipeline</td>
+        </tr>
+        <tr>
+          <td>Sensitive system access needed by agents</td>
+          <td class="pattern-col">2. Two-Hop Security Boundary</td>
+        </tr>
+        <tr>
+          <td>Agents depend on OAuth services</td>
+          <td class="pattern-col">3. Circuit Breaker</td>
+        </tr>
+        <tr>
+          <td>Mix of auto and manual agent decisions</td>
+          <td class="pattern-col">4. Human Gate + Tiered Autonomy</td>
+        </tr>
+        <tr>
+          <td>Index or dashboard showing "all X"</td>
+          <td class="pattern-col">5. Self-Healing Derived State</td>
+        </tr>
+        <tr>
+          <td>Recurring file generation</td>
+          <td class="pattern-col">6. Overwrite vs Archive</td>
+        </tr>
+        <tr>
+          <td>Same content, different display contexts</td>
+          <td class="pattern-col">7. Billboard Mode</td>
+        </tr>
+        <tr>
+          <td>Need to enumerate items from a database</td>
+          <td class="pattern-col">8. Two-Layer Read</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Part of the <a href="../index.html">CCAF Architecture Starter Kit</a>
+  </footer>
+
+</div>
+</body>
+</html>

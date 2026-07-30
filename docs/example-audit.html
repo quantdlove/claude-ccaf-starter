@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worked Example: CCAF Audit of Acme Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-page:#F2F2F7;
+    --bg-card:#F9F9FB;
+    --text:#1D1D1F;
+    --text2:#86868B;
+    --text3:#AEAEB2;
+    --accent:#FF1D58;
+    --green:#34C759;
+    --red:#FF3B30;
+    --blue:#007AFF;
+    --teal:#57D7BA;
+    --border:rgba(0,0,0,0.06);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html,body{
+    background:var(--bg-page);
+    color:var(--text);
+  }
+
+  body{
+    font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.55;
+  }
+
+  .container{
+    max-width:720px;
+    margin:0 auto;
+    padding:40px 24px 60px;
+  }
+
+  a{ color:var(--blue); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+
+  .backlink{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text2);
+    margin-bottom:24px;
+  }
+  .backlink:hover{ color:var(--blue); text-decoration:none; }
+  .backlink svg{ width:14px; height:14px; }
+
+  .eyebrow{
+    font-size:11px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+
+  h1{
+    font-size:32px;
+    font-weight:700;
+    letter-spacing:-0.03em;
+    line-height:1.1;
+    margin-bottom:12px;
+  }
+
+  .intro-text{
+    font-size:15px;
+    color:var(--text2);
+    line-height:1.6;
+    margin-bottom:8px;
+  }
+
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+    margin-bottom:8px;
+  }
+
+  .btn-download{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+    background:var(--bg-card);
+    border:0.5px solid var(--border);
+    border-radius:8px;
+    padding:8px 14px;
+  }
+  .btn-download:hover{ text-decoration:none; border-color:var(--blue); color:var(--blue); }
+  .btn-download svg{ width:14px; height:14px; }
+
+  section.card{
+    background:var(--bg);
+    border-radius:12px;
+    border:0.5px solid var(--border);
+    box-shadow:0 1px 8px rgba(0,0,0,0.03);
+    padding:24px 28px;
+    margin-bottom:16px;
+  }
+
+  h2{
+    font-size:14px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--text2);
+    margin-bottom:4px;
+  }
+
+  .domain-weight{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    color:var(--text3);
+    margin-bottom:16px;
+  }
+
+  h3{
+    font-size:15px;
+    font-weight:600;
+    margin-top:20px;
+    margin-bottom:10px;
+  }
+  h3:first-of-type{ margin-top:4px; }
+
+  p{
+    font-size:14px;
+    line-height:1.55;
+    color:var(--text);
+  }
+
+  .lead-p{
+    font-size:14px;
+    color:var(--text2);
+    margin-bottom:4px;
+  }
+
+  /* mermaid diagram wrapper */
+  .diagram-wrap{
+    background:var(--bg-card);
+    border:0.5px solid var(--border);
+    border-radius:10px;
+    padding:16px;
+    margin:14px 0 18px;
+    overflow-x:auto;
+  }
+  .diagram-caption{
+    font-size:12px;
+    color:var(--text3);
+    text-align:center;
+    margin-top:6px;
+  }
+  .mermaid{
+    display:flex;
+    justify-content:center;
+  }
+
+  /* audit item row */
+  .audit-item{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    background:var(--bg-card);
+    border-radius:10px;
+    border-left:3px solid var(--border);
+    padding:12px 14px;
+    margin-bottom:8px;
+  }
+  .audit-item .item-body{ flex:1 1 auto; }
+  .audit-item .item-check{ font-size:13.5px; font-weight:600; margin-bottom:2px; }
+  .audit-item .item-note{ font-size:13px; color:var(--text2); line-height:1.5; }
+
+  .badge{
+    flex:0 0 auto;
+    display:inline-block;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:#fff;
+    border-radius:20px;
+    padding:4px 10px;
+    white-space:nowrap;
+    margin-top:1px;
+  }
+  .badge.pass{ background:var(--green); }
+  .badge.fail{ background:var(--red); }
+
+  .audit-item.is-fail{
+    border-left:3px solid var(--red);
+    background:#FFF5F4;
+  }
+
+  /* red line callouts */
+  .redline-heading{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:24px;
+    margin-bottom:10px;
+  }
+  .redline-heading .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--red);
+    flex:0 0 8px;
+  }
+  .redline-heading h3{
+    margin:0;
+    color:var(--red);
+  }
+  .redline-tag{
+    display:inline-block;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:#fff;
+    background:var(--red);
+    border-radius:4px;
+    padding:2px 6px;
+    margin-right:8px;
+    vertical-align:middle;
+  }
+
+  /* domain score footer inside each card */
+  .domain-score-line{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    background:var(--bg-card);
+    border-radius:8px;
+    padding:10px 14px;
+    margin-top:16px;
+    font-size:13.5px;
+    font-weight:600;
+  }
+  .domain-score-line .score-value{
+    color:var(--text);
+  }
+
+  /* areas to improve callout */
+  .callout{
+    border-left:3px solid var(--blue);
+    background:var(--bg-card);
+    border-radius:0 10px 10px 0;
+    padding:12px 16px;
+    margin-top:16px;
+  }
+  .callout .callout-title{
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--blue);
+    margin-bottom:8px;
+  }
+  .callout ol{
+    margin-left:18px;
+  }
+  .callout li{
+    font-size:13.5px;
+    line-height:1.55;
+    margin-bottom:4px;
+  }
+  .callout.critical{
+    border-left:3px solid var(--red);
+  }
+  .callout.critical .callout-title{
+    color:var(--red);
+  }
+
+  /* system overview list */
+  .overview-list{
+    margin:12px 0 4px 18px;
+  }
+  .overview-list li{
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:4px;
+  }
+
+  /* scorecard / dashboard */
+  .score-card{
+    background:var(--bg);
+    border-radius:12px;
+    border:0.5px solid var(--border);
+    box-shadow:0 1px 8px rgba(0,0,0,0.03);
+    padding:24px 28px;
+    margin-bottom:16px;
+  }
+
+  .score-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0 8px;
+  }
+  .score-table th{
+    text-align:left;
+    font-size:11px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--text3);
+    padding:8px 6px;
+    border-bottom:1px solid var(--border);
+  }
+  .score-table td{
+    font-size:13.5px;
+    padding:10px 6px;
+    border-bottom:1px solid var(--border);
+    vertical-align:middle;
+  }
+  .score-table tr:last-child td{ border-bottom:none; }
+  .score-table .num{ text-align:right; font-weight:600; }
+
+  .weight-pill{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    color:var(--text2);
+    background:var(--bg-page);
+    border-radius:20px;
+    padding:3px 9px;
+  }
+
+  .bar-track{
+    width:100%;
+    height:6px;
+    border-radius:4px;
+    background:var(--bg-page);
+    overflow:hidden;
+    margin-top:4px;
+  }
+  .bar-fill{
+    height:100%;
+    border-radius:4px;
+    background:var(--teal);
+  }
+  .bar-fill.weak{ background:var(--red); }
+  .bar-fill.mid{ background:var(--blue); }
+
+  .total-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    background:#0f0f0f;
+    border-radius:10px;
+    padding:18px 22px;
+    margin-top:14px;
+    flex-wrap:wrap;
+  }
+  .total-row .label{
+    font-size:12px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:#AEAEB2;
+  }
+  .total-row .value{
+    font-size:26px;
+    font-weight:700;
+    color:#fff;
+  }
+  .total-row .value span{
+    color:var(--teal);
+  }
+  .pass-pill{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:#000;
+    background:var(--teal);
+    border-radius:20px;
+    padding:5px 12px;
+    margin-left:10px;
+  }
+
+  .result-note{
+    font-size:13.5px;
+    color:var(--text2);
+    margin-top:14px;
+    line-height:1.6;
+  }
+  .result-note strong{ color:var(--text); }
+
+  footer{
+    text-align:center;
+    padding:32px 0 8px;
+    font-size:12px;
+    color:var(--text3);
+  }
+  footer a{ color:var(--text2); font-weight:600; }
+
+  hr.rule{
+    border:none;
+    border-top:1px solid var(--border);
+    margin:20px 0;
+  }
+
+  @media (max-width:480px){
+    h1{ font-size:26px; }
+    section.card, .score-card{ padding:18px 18px; }
+    .container{ padding:24px 16px 48px; }
+    .score-table th:nth-child(2), .score-table td:nth-child(2){ display:none; }
+    .audit-item{ flex-direction:column; }
+    .badge{ margin-top:6px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="backlink" href="../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    Back to Starter Kit
+  </a>
+
+  <div class="eyebrow">CCAF Architecture Starter Kit</div>
+  <h1>Worked Example: CCAF Audit of Acme Analytics</h1>
+  <p class="intro-text">This is a complete CCAF audit of a fictional company's Claude-powered system. Use it as a reference for how to apply the audit checklist to a real system.</p>
+
+  <div class="toolbar">
+    <a class="btn-download" href="example-audit.md" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Download markdown version
+    </a>
+  </div>
+
+  <!-- System overview -->
+  <section class="card">
+    <h2>System Overview: Acme Analytics</h2>
+    <p class="lead-p" style="margin-top:8px;">Acme Analytics is a 4-person B2B SaaS company that sells market intelligence data to financial firms. They use Claude to power:</p>
+    <ul class="overview-list">
+      <li>A weekly newsletter sent to 50K subscribers (Tuesday send)</li>
+      <li>A BD pipeline that qualifies inbound leads from their subscriber list</li>
+      <li>A standup deck generated Mon/Wed/Fri for the CEO</li>
+      <li>An MCP server exposing 15 API endpoints as Claude tools</li>
+    </ul>
+
+    <h3>Architecture Diagram</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    subgraph Scheduled Agents
+        A1["Agent 1<br/>Subscriber Ingest<br/>6am daily"]
+        A2["Agent 2<br/>Lead Digest<br/>5pm weekdays"]
+        A3["Agent 3<br/>Verdict Parser<br/>7:30am weekdays"]
+        A4["Agent 4<br/>Lead Enrichment<br/>8am weekdays"]
+    end
+
+    subgraph Shared State
+        H[handoff.json]
+        D[digest.json]
+        L[ledger.json]
+        DC[domain-cache.json]
+    end
+
+    subgraph External
+        BH[Email Platform]
+        SL[Slack #sales]
+        NT[Notion CRM]
+        AP[Apollo]
+    end
+
+    A1 -->|writes| H
+    A1 -->|refreshes| DC
+    A2 -->|reads| H
+    A2 -->|writes| D
+    A2 -->|posts| SL
+    A3 -->|reads| SL
+    A3 -->|writes| L
+    A3 -->|writes| NT
+    A4 -->|reads| L
+    A4 -->|enriches via| AP
+    A4 -->|writes| NT
+      </div>
+      <p class="diagram-caption">Four scheduled agents hand off work via shared-state JSON files, not in-memory context.</p>
+    </div>
+
+    <h3>Newsletter Pipeline</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    R["Research<br/>Monday"] --> B["Build<br/>Tuesday AM"]
+    B --> REV["CEO Review<br/>Tuesday PM"]
+    REV --> S["Send<br/>Tuesday Evening"]
+    S --> AN["Analytics<br/>Wednesday"]
+    AN -->|feedback loop| R
+      </div>
+      <p class="diagram-caption">A closed loop. Analytics from each send feeds the next week's research.</p>
+    </div>
+  </section>
+
+  <!-- D1 -->
+  <section class="card">
+    <h2>D1: Agentic Architecture</h2>
+    <span class="domain-weight">27% of exam</span>
+
+    <h3>Pipeline Design</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Explicit architecture pattern</div><div class="item-note">Sequential pipeline with async handoff. Can name it. Can draw the DAG.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Async handoff via shared state</div><div class="item-note">JSON files in workspace. No in-memory passing.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Single responsibility per agent</div><div class="item-note">Agent 1 ingests, Agent 2 digests, Agent 3 parses, Agent 4 enriches.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Ordered stages</div><div class="item-note">1 to 2 to 3 to 4. No circular dependencies.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Tiered Autonomy</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Actions classified by tier</div><div class="item-note">Tier 1: keyword filtering. Tier 2: lead qualification. Tier 3: pricing decisions.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Human review gate on customer-facing output</div><div class="item-note">Newsletter requires CEO review before send.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Tier boundaries explicit in instructions</div><div class="item-note">Each agent SKILL.md states its autonomy tier.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>State Management</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Shared state via files</div><div class="item-note">Four JSON files.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check">Defined schemas</div><div class="item-note">handoff.json has no documented schema. Agent 1 adds fields ad hoc.</div></div><span class="badge fail">Fail</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Derived state self-heals</div><div class="item-note">Domain cache rebuilt from source on every run.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines</h3></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No implicit architecture</div><div class="item-note">Pattern is named and documented.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No circular dependencies</div><div class="item-note">DAG flows one direction.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>Single authoritative writer per file</div><div class="item-note">Both Agent 3 and Agent 4 write to Notion CRM. No clear owner. Race conditions possible.</div></div><span class="badge fail">Fail</span></div>
+
+    <div class="domain-score-line"><span>D1 Score</span><span class="score-value">10/13 = 77%</span></div>
+
+    <div class="callout">
+      <div class="callout-title">Areas to improve</div>
+      <ol>
+        <li>Document the handoff.json schema in CLAUDE.md.</li>
+        <li>Designate one agent as the authoritative Notion writer.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- D2 -->
+  <section class="card">
+    <h2>D2: Tool Design and MCP</h2>
+    <span class="domain-weight">18% of exam</span>
+
+    <h3>Tool Selection</h3>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check">Right tool for the job</div><div class="item-note">Lead dashboard uses semantic search instead of structured query. Some leads silently disappear.</div></div><span class="badge fail">Fail</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Tool discovery at session start</div><div class="item-note">All agents call search_datasets first.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Pagination handled</div><div class="item-note">Small datasets use limit=500. Large datasets use date filters.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Transport Architecture</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Transport separated from logic</div><div class="item-note">Business logic works whether data comes from MCP or REST API.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Auth boundaries documented</div><div class="item-note">CLAUDE.md lists which tools need OAuth vs API key.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Two-hop for sensitive systems</div><div class="item-note">Payment processor uses human-triggered snapshot.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Error Handling</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Retry logic</div><div class="item-note">All MCP calls retry once.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check">Fallback data sources</div><div class="item-note">No fallback for the email platform API.</div></div><span class="badge fail">Fail</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Errors surface to user</div><div class="item-note">Errors posted to Slack.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines</h3></div>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No semantic search for enumeration</div><div class="item-note">Dashboard uses semantic search. Silent data loss bug.</div></div><span class="badge fail">Fail</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No hardcoded schemas</div><div class="item-note">Tools discovered at runtime.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No credentials in prompts</div><div class="item-note">Environment variables only.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="domain-score-line"><span>D2 Score</span><span class="score-value">6/9 = 67%</span></div>
+
+    <div class="callout critical">
+      <div class="callout-title">Areas to improve</div>
+      <ol>
+        <li>Critical: replace semantic search with structured query. Use the Two-Layer Read pattern.</li>
+        <li>Define a fallback for the email platform API.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- D3 -->
+  <section class="card">
+    <h2>D3: Claude Code Config</h2>
+    <span class="domain-weight">20% of exam</span>
+
+    <h3>Project Structure</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">CLAUDE.md at root</div><div class="item-note">Contains team context, rules, architecture, folder structure.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Spec before implementation</div><div class="item-note">CLAUDE.md updated before agent changes.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Clean .claude/ structure</div><div class="item-note">skills/, commands/, rules/ each have a clear purpose.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Skills, Commands, Rules</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Skills for recurring tasks</div><div class="item-note">Newsletter production, report generation.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Commands for human-triggered workflows</div><div class="item-note">/publish, /analyze, /sync-deal.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Path-scoped rules</div><div class="item-note">marketing/** rules enforce tone and data integrity.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">No overlap</div><div class="item-note">Each file type has one job.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Security Model</h3>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check">Hooks enforce policy</div><div class="item-note">No PreToolUse hooks. Agent compliance enforced only by prompt.</div></div><span class="badge fail">Fail</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Sensitive ops require human confirmation</div><div class="item-note">All sends and publishes require chat confirmation.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Publishing has sanitization gates</div><div class="item-note">/publish scans for credentials and PII.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Three-Tier Access</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Tier 1 defined</div><div class="item-note">CLAUDE.md, memory/, agent configs.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Tier 2 defined</div><div class="item-note">Training decks via private repo.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Tier 3 defined</div><div class="item-note">Marketing stats, sanitized patterns.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Separate commands per security model</div><div class="item-note">/publish-staging and /publish-public have different gates.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines</h3></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>CLAUDE.md not on public repo</div><div class="item-note">Starter template shared, never the real file.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No credentials in config files</div><div class="item-note">Environment variables only.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="domain-score-line"><span>D3 Score</span><span class="score-value">12/14 = 86%</span></div>
+
+    <div class="callout">
+      <div class="callout-title">Areas to improve</div>
+      <ol>
+        <li>Add PreToolUse hooks for critical operations.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- D4 -->
+  <section class="card">
+    <h2>D4: Prompt and Structured Output</h2>
+    <span class="domain-weight">20% of exam</span>
+
+    <h3>Prompt Design</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Agent defines inputs, outputs, constraints</div><div class="item-note">Each SKILL.md has structured sections.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Structured sections</div><div class="item-note">Headers, not walls of text.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check">Output schemas in CLAUDE.md</div><div class="item-note">Agent 4 enrichment output has no defined schema.</div></div><span class="badge fail">Fail</span></div>
+
+    <h3>Output Quality</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Quantitative rigor</div><div class="item-note">Formula, calculation, sensitivity, and source.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Data freshness disclosed</div><div class="item-note">Every newsletter has a freshness footer.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Delivery Format</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Format matches delivery</div><div class="item-note">PDF uses a fixed canvas. Dashboard scrolls. Email uses inline CSS.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Billboard mode uses overrides</div><div class="item-note">CSS variables overridden, not forked.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines</h3></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No unverified quantitative claims</div><div class="item-note">[VERIFY] tag used.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No broken cross-references</div><div class="item-note">Links verified.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="domain-score-line"><span>D4 Score</span><span class="score-value">8/10 = 80%</span></div>
+
+    <div class="callout">
+      <div class="callout-title">Areas to improve</div>
+      <ol>
+        <li>Define the enrichment output schema in CLAUDE.md.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- D5 -->
+  <section class="card">
+    <h2>D5: Context and Reliability</h2>
+    <span class="domain-weight">15% of exam</span>
+
+    <h3>Source of Truth</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">One source per metric</div><div class="item-note">CRM for deals. Email platform for subscribers.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Formula fields read only</div><div class="item-note">Notion formulas are read, not recalculated.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Conflict hierarchy explicit</div><div class="item-note">Database, then API, then cache, then training data.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Failure Modes</h3>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check">No silent data loss</div><div class="item-note">No circuit breaker on Slack OAuth. Token expired, digest failed silently for 3 weeks.</div></div><span class="badge fail">Fail</span></div>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check">Circuit breakers exist</div><div class="item-note">No canary calls, no fallback files, no alerts via separate channel.</div></div><span class="badge fail">Fail</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Idempotent operations</div><div class="item-note">Bulk writes check for existing records.</div></div><span class="badge pass">Pass</span></div>
+
+    <h3>Disclosure and Transparency</h3>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Data freshness disclosed</div><div class="item-note">Footer on every output.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Floor-rounded numbers</div><div class="item-note">"50K+" in marketing. Exact count internally.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check">Disclosure boundary explicit</div><div class="item-note">Tier 1/2/3 defined in CLAUDE.md.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="redline-heading"><span class="dot"></span><h3>Red Lines</h3></div>
+    <div class="audit-item is-fail"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>Silent failures are bugs</div><div class="item-note">Slack OAuth failure was silent for 21 days.</div></div><span class="badge fail">Fail</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No formula recalculation</div><div class="item-note">Read only.</div></div><span class="badge pass">Pass</span></div>
+    <div class="audit-item"><div class="item-body"><div class="item-check"><span class="redline-tag">Red line</span>No dual maintenance</div><div class="item-note">Single source per metric.</div></div><span class="badge pass">Pass</span></div>
+
+    <div class="domain-score-line"><span>D5 Score</span><span class="score-value">7/10 = 70%</span></div>
+
+    <div class="callout critical">
+      <div class="callout-title">Areas to improve</div>
+      <ol>
+        <li>Critical: implement the Circuit Breaker pattern. Every agent starts with a canary call. Failure triggers degraded mode.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Overall score / dashboard -->
+  <div class="score-card">
+    <h2>Overall Score</h2>
+    <p class="lead-p">Weighted across all five domains, projected out of 1000.</p>
+
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>Weight</th>
+          <th class="num">Score</th>
+          <th class="num">Weighted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>D1 Agentic Architecture<div class="bar-track"><div class="bar-fill mid" style="width:77%"></div></div></td>
+          <td><span class="weight-pill">27%</span></td>
+          <td class="num">77%</td>
+          <td class="num">208</td>
+        </tr>
+        <tr>
+          <td>D2 Tool Design and MCP<div class="bar-track"><div class="bar-fill weak" style="width:67%"></div></div></td>
+          <td><span class="weight-pill">18%</span></td>
+          <td class="num">67%</td>
+          <td class="num">120</td>
+        </tr>
+        <tr>
+          <td>D3 Claude Code Config<div class="bar-track"><div class="bar-fill" style="width:86%"></div></div></td>
+          <td><span class="weight-pill">20%</span></td>
+          <td class="num">86%</td>
+          <td class="num">171</td>
+        </tr>
+        <tr>
+          <td>D4 Prompt and Output<div class="bar-track"><div class="bar-fill" style="width:80%"></div></div></td>
+          <td><span class="weight-pill">20%</span></td>
+          <td class="num">80%</td>
+          <td class="num">160</td>
+        </tr>
+        <tr>
+          <td>D5 Context and Reliability<div class="bar-track"><div class="bar-fill weak" style="width:70%"></div></div></td>
+          <td><span class="weight-pill">15%</span></td>
+          <td class="num">70%</td>
+          <td class="num">105</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="total-row">
+      <span class="label">Total</span>
+      <span class="value"><span>764</span> / 1000 <span class="pass-pill">Pass</span></span>
+    </div>
+
+    <p class="result-note"><strong>Result: pass (720 threshold).</strong> But barely. Two critical bugs would fail the system in a stricter audit.</p>
+
+    <h3>Priority Fix Order</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    P1["P1: Circuit Breaker<br/>D5 silent failure bug<br/>Highest risk"] --> P2["P2: Semantic Search to Query<br/>D2 silent data loss<br/>Leads disappearing"]
+    P2 --> P3["P3: Schema Documentation<br/>D1 handoff.json + D4 enrichment output<br/>Drift prevention"]
+    P3 --> P4["P4: PreToolUse Hooks<br/>D3 policy enforcement<br/>Safety net"]
+    P4 --> P5["P5: Single Notion Writer<br/>D1 race condition<br/>Correctness"]
+    P5 --> P6["P6: Email Platform Fallback<br/>D2 resilience<br/>Newsletter continuity"]
+      </div>
+      <p class="diagram-caption">Fix the silent-failure bugs first. Everything else is lower risk.</p>
+    </div>
+
+    <h3>Architecture Maturity</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+quadrantChart
+    title Architecture Maturity by Domain
+    x-axis Low Maturity --> High Maturity
+    y-axis Low Impact --> High Impact
+    quadrant-1 Fix Now
+    quadrant-2 Monitor
+    quadrant-3 Backlog
+    quadrant-4 Strong
+    D5 Reliability: [0.35, 0.85]
+    D2 Tool Design: [0.33, 0.70]
+    D1 Architecture: [0.60, 0.90]
+    D4 Prompt Output: [0.65, 0.55]
+    D3 Config: [0.75, 0.60]
+      </div>
+      <p class="diagram-caption">D5 and D2 sit in the Fix Now quadrant. D3 and D4 are strong. D1 is solid but has schema documentation gaps.</p>
+    </div>
+  </div>
+
+  <footer>
+    Part of the <a href="../index.html">CCAF Architecture Starter Kit</a>
+  </footer>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'neutral',
+    themeVariables: {
+      primaryColor: '#F2F2F7',
+      primaryTextColor: '#1D1D1F',
+      lineColor: '#86868B'
+    }
+  });
+</script>
+</body>
+</html>

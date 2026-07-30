@@ -2,6 +2,8 @@
 
 A starter kit for building production Claude systems that pass the [Claude Certified Architect Foundations](docs/ccaf-exam-guide.pdf) exam.
 
+**[Browse the rendered site](https://quantdlove.github.io/claude-ccaf-starter/)** for a visual walkthrough of every document.
+
 Built by [David Love](https://linkedin.com/in/quantdlove), Head of Sales & Operations at [Quiver Quant](https://quiverquant.com). Quiver runs 9 scheduled Claude agents, 27 MCP endpoints, and two newsletter pipelines serving 300K+ subscribers, all architected around CCAF principles.
 
 ## What's Inside
@@ -11,9 +13,9 @@ Built by [David Love](https://linkedin.com/in/quantdlove), Head of Sales & Opera
 | File | What It Is |
 |------|-----------|
 | [CLAUDE.md](CLAUDE.md) | Starter template showing the STRUCTURE of a production CLAUDE.md. Generic "Acme Analytics" example. Covers: team context, writing rules, precision rules, design system, MCP config, agent architecture, file hygiene, token efficiency. |
-| [Audit Checklist](docs/audit-checklist.md) | 56 pass/fail items across all 5 CCAF domains. Red-line items that are automatic failures. Scoring formula. Use this to audit your own system. |
-| [Pattern Catalog](docs/pattern-catalog.md) | 8 production-tested architecture patterns with diagrams, implementation guidance, CCAF domain mapping, and anti-patterns. |
-| [Worked Audit Example](docs/example-audit.md) | Complete D1-D5 audit of a fictional "Acme Analytics" system with Mermaid architecture diagrams, per-domain scoring, and prioritized fix list. |
+| [Audit Checklist](docs/audit-checklist.md) ([HTML](https://quantdlove.github.io/claude-ccaf-starter/docs/audit-checklist.html)) | 56 pass/fail items across all 5 CCAF domains. Red-line items that are automatic failures. Scoring formula. Use this to audit your own system. |
+| [Pattern Catalog](docs/pattern-catalog.md) ([HTML](https://quantdlove.github.io/claude-ccaf-starter/docs/pattern-catalog.html)) | 8 production-tested architecture patterns with diagrams, implementation guidance, CCAF domain mapping, and anti-patterns. |
+| [Worked Audit Example](docs/example-audit.md) ([HTML](https://quantdlove.github.io/claude-ccaf-starter/docs/example-audit.html)) | Complete D1-D5 audit of a fictional "Acme Analytics" system with Mermaid architecture diagrams, per-domain scoring, and prioritized fix list. |
 
 ### .claude/ Skeleton
 
@@ -33,6 +35,7 @@ Example skill, rules, and command files showing the structure of each config typ
 |------|-----------|
 | [CCAF Exam Guide](docs/ccaf-exam-guide.pdf) | Anthropic's official exam guide. Domain weights, exam format, study topics. |
 | [Ambassador Deck](docs/ambassador-deck.html) | Slide deck from the Capital Factory presentation on CCAF architecture. Open in a browser or print to PDF. |
+
 ## The Five CCAF Domains
 
 | Domain | Weight | Core Question |

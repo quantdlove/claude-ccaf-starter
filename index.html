@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCAF Architecture Starter Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* === RESET === */
+*{margin:0;padding:0;box-sizing:border-box;}
+
+/* === BASE === */
+:root{
+  --bg:#FFFFFF;
+  --bg-page:#F2F2F7;
+  --bg-card:#F9F9FB;
+  --text:#1D1D1F;
+  --text2:#86868B;
+  --text3:#AEAEB2;
+  --accent:#FF1D58;
+  --green:#34C759;
+  --red:#FF3B30;
+  --blue:#007AFF;
+  --teal:#57D7BA;
+  --purple:#AF52DE;
+  --orange:#FF9500;
+  --border:rgba(0,0,0,0.06);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font);
+  background:var(--bg-page);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+
+/* === CONTAINER === */
+.container{
+  max-width:720px;
+  margin:0 auto;
+  padding:40px 24px 60px;
+}
+
+/* === HERO === */
+.hero{
+  text-align:center;
+  padding:48px 0 32px;
+}
+.hero .eyebrow{
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  color:var(--accent);
+  margin-bottom:12px;
+}
+.hero h1{
+  font-size:36px;
+  font-weight:800;
+  letter-spacing:-0.03em;
+  line-height:1.1;
+  color:var(--text);
+  margin-bottom:12px;
+}
+.hero .subtitle{
+  font-size:16px;
+  color:var(--text2);
+  line-height:1.5;
+  max-width:540px;
+  margin:0 auto 20px;
+}
+.hero .badge{
+  display:inline-block;
+  font-size:12px;
+  font-weight:600;
+  color:var(--teal);
+  background:rgba(87,215,186,0.1);
+  border:1px solid rgba(87,215,186,0.2);
+  border-radius:20px;
+  padding:4px 14px;
+}
+
+/* === SECTIONS === */
+.section{
+  background:var(--bg);
+  border-radius:12px;
+  border:0.5px solid var(--border);
+  box-shadow:0 1px 8px rgba(0,0,0,0.03);
+  padding:24px 28px;
+  margin-bottom:16px;
+}
+.section h2{
+  font-size:14px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--text2);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.section h2 .icon{font-size:16px;}
+
+/* === WHAT IS CCAF === */
+.explainer{
+  font-size:14px;
+  color:var(--text);
+  line-height:1.6;
+  margin-bottom:16px;
+}
+.explainer strong{font-weight:600;}
+
+/* === DOMAIN CARDS === */
+.domain-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.domain-card{
+  background:var(--bg-card);
+  border-radius:10px;
+  padding:16px;
+  border:0.5px solid var(--border);
+}
+.domain-card .weight{
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--text3);
+  margin-bottom:4px;
+}
+.domain-card .name{
+  font-size:15px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.domain-card .desc{
+  font-size:12px;
+  color:var(--text2);
+  line-height:1.4;
+}
+.domain-card.d1{border-left:3px solid var(--blue);}
+.domain-card.d2{border-left:3px solid var(--teal);}
+.domain-card.d3{border-left:3px solid var(--purple);}
+.domain-card.d4{border-left:3px solid var(--orange);}
+.domain-card.d5{border-left:3px solid var(--green);}
+.domain-card.full{grid-column:1/-1;}
+
+/* === DOC CARDS === */
+.doc-card{
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  padding:16px 0;
+  border-bottom:0.5px solid var(--border);
+  text-decoration:none;
+  color:inherit;
+  transition:opacity 0.15s;
+}
+.doc-card:last-child{border-bottom:none;}
+.doc-card:hover{opacity:0.7;}
+.doc-icon{
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  flex-shrink:0;
+}
+.doc-icon.checklist{background:rgba(52,199,89,0.1);}
+.doc-icon.patterns{background:rgba(0,122,255,0.1);}
+.doc-icon.audit{background:rgba(175,82,222,0.1);}
+.doc-icon.deck{background:rgba(255,29,88,0.1);}
+.doc-icon.template{background:rgba(255,149,0,0.1);}
+.doc-icon.exam{background:rgba(87,215,186,0.1);}
+.doc-info{flex:1;min-width:0;}
+.doc-info .title{
+  font-size:15px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:2px;
+}
+.doc-info .desc{
+  font-size:13px;
+  color:var(--text2);
+  line-height:1.4;
+}
+.doc-arrow{
+  color:var(--text3);
+  font-size:18px;
+  margin-top:12px;
+  flex-shrink:0;
+}
+
+/* === QUICK START === */
+.step{
+  display:flex;
+  gap:14px;
+  margin-bottom:16px;
+}
+.step:last-child{margin-bottom:0;}
+.step-num{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:var(--text);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  margin-top:2px;
+}
+.step-text{
+  font-size:14px;
+  color:var(--text);
+  line-height:1.5;
+}
+.step-text code{
+  font-family:'SF Mono',SFMono-Regular,Consolas,monospace;
+  font-size:12px;
+  background:var(--bg-page);
+  padding:2px 6px;
+  border-radius:4px;
+  color:var(--text);
+}
+
+/* === CLONE BOX === */
+.clone-box{
+  background:var(--text);
+  border-radius:8px;
+  padding:14px 18px;
+  margin-top:16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.clone-box code{
+  font-family:'SF Mono',SFMono-Regular,Consolas,monospace;
+  font-size:13px;
+  color:#fff;
+  flex:1;
+  overflow-x:auto;
+  white-space:nowrap;
+}
+.clone-box .copy-label{
+  font-size:11px;
+  font-weight:600;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  flex-shrink:0;
+}
+
+/* === CALLOUT === */
+.callout{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 16px;
+  background:linear-gradient(135deg,rgba(0,122,255,0.04),rgba(175,82,222,0.04));
+  border-radius:8px;
+  border-left:3px solid var(--blue);
+  font-size:13px;
+  color:var(--text);
+  line-height:1.5;
+  margin-top:16px;
+}
+.callout .callout-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* === ATTRIBUTION === */
+.attribution{
+  text-align:center;
+  padding:32px 0 0;
+  font-size:12px;
+  color:var(--text3);
+  line-height:1.6;
+}
+.attribution a{
+  color:var(--blue);
+  text-decoration:underline;
+}
+
+/* === RESPONSIVE === */
+@media(max-width:600px){
+  .container{padding:24px 16px 40px;}
+  .hero h1{font-size:28px;}
+  .hero .subtitle{font-size:14px;}
+  .domain-grid{grid-template-columns:1fr;}
+  .section{padding:18px 20px;}
+  .doc-card{gap:12px;}
+  .doc-icon{width:38px;height:38px;font-size:18px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">Open Source Starter Kit</div>
+    <h1>CCAF Architecture<br>Starter Kit</h1>
+    <p class="subtitle">Everything you need to build production Claude systems that pass the Claude Certified Architect Foundations exam. Templates, patterns, checklists, and a worked example.</p>
+    <span class="badge">Free + MIT Licensed</span>
+  </div>
+
+  <!-- WHAT IS CCAF -->
+  <div class="section">
+    <h2><span class="icon">&#x1F3AF;</span> What is CCAF?</h2>
+    <p class="explainer">
+      <strong>Claude Certified Architect Foundations</strong> is Anthropic's certification for building production AI agent systems. It tests whether you can design, configure, and maintain Claude-powered pipelines that are reliable, secure, and well-architected.
+    </p>
+    <p class="explainer">
+      The exam covers five domains, each weighted by importance. A passing score is 720 out of 1000. This starter kit gives you the building blocks: a CLAUDE.md template, architecture patterns, an audit checklist, and a full worked example you can study.
+    </p>
+    <div class="callout">
+      <span class="callout-icon">&#x1F4A1;</span>
+      <span>New to Claude agents? Start with the <strong>Five Domains</strong> below to understand the framework, then browse the <strong>Pattern Catalog</strong> to see how production systems are actually built.</span>
+    </div>
+  </div>
+
+  <!-- FIVE DOMAINS -->
+  <div class="section">
+    <h2><span class="icon">&#x1F4CA;</span> The Five CCAF Domains</h2>
+    <div class="domain-grid">
+      <div class="domain-card d1">
+        <div class="weight">27% of exam</div>
+        <div class="name">D1: Agentic Architecture</div>
+        <div class="desc">Pipeline design, tiered autonomy, state management. Can you draw the system?</div>
+      </div>
+      <div class="domain-card d3">
+        <div class="weight">20% of exam</div>
+        <div class="name">D3: Claude Code Config</div>
+        <div class="desc">CLAUDE.md as spec. Skills, commands, rules. Security model and hooks.</div>
+      </div>
+      <div class="domain-card d4">
+        <div class="weight">20% of exam</div>
+        <div class="name">D4: Prompt and Output</div>
+        <div class="desc">Structured prompts, output schemas, delivery format, quantitative rigor.</div>
+      </div>
+      <div class="domain-card d2">
+        <div class="weight">18% of exam</div>
+        <div class="name">D2: Tool Design and MCP</div>
+        <div class="desc">Right tool for the job. Transport architecture. Search vs. query. Error handling.</div>
+      </div>
+      <div class="domain-card d5 full">
+        <div class="weight">15% of exam</div>
+        <div class="name">D5: Context and Reliability</div>
+        <div class="desc">One source of truth. Circuit breakers. Silent failure prevention. Data freshness disclosure.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BROWSE THE KIT -->
+  <div class="section">
+    <h2><span class="icon">&#x1F4C2;</span> Browse the Kit</h2>
+
+    <a class="doc-card" href="docs/audit-checklist.html">
+      <div class="doc-icon checklist">&#x2705;</div>
+      <div class="doc-info">
+        <div class="title">Audit Checklist</div>
+        <div class="desc">56 pass/fail items across all 5 domains. Red-line items that are automatic failures. Scoring formula included.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+
+    <a class="doc-card" href="docs/pattern-catalog.html">
+      <div class="doc-icon patterns">&#x1F9E9;</div>
+      <div class="doc-info">
+        <div class="title">Pattern Catalog</div>
+        <div class="desc">8 production-tested architecture patterns: sequential pipelines, circuit breakers, tiered autonomy, self-healing state, and more.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+
+    <a class="doc-card" href="docs/example-audit.html">
+      <div class="doc-icon audit">&#x1F50D;</div>
+      <div class="doc-info">
+        <div class="title">Worked Audit Example</div>
+        <div class="desc">Complete D1-D5 audit of a fictional "Acme Analytics" system with architecture diagrams, per-domain scoring, and a prioritized fix list.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+
+    <a class="doc-card" href="docs/ambassador-deck.html">
+      <div class="doc-icon deck">&#x1F4DD;</div>
+      <div class="doc-info">
+        <div class="title">Presentation Deck</div>
+        <div class="desc">Slide deck from the Capital Factory meetup on CCAF architecture. Open in browser or print to PDF.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+
+    <a class="doc-card" href="CLAUDE.md">
+      <div class="doc-icon template">&#x1F4C4;</div>
+      <div class="doc-info">
+        <div class="title">CLAUDE.md Starter Template</div>
+        <div class="desc">Generic "Acme Analytics" template showing the structure of a production CLAUDE.md. Copy it, fill in your team's details.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+
+    <a class="doc-card" href="docs/ccaf-exam-guide.pdf">
+      <div class="doc-icon exam">&#x1F4D8;</div>
+      <div class="doc-info">
+        <div class="title">CCAF Exam Guide (PDF)</div>
+        <div class="desc">Anthropic's official exam guide. Domain weights, exam format, study topics.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+  </div>
+
+  <!-- .CLAUDE/ SKELETON -->
+  <div class="section">
+    <h2><span class="icon">&#x1F527;</span> .claude/ Config Examples</h2>
+    <p class="explainer">Example skill, rules, and command files showing the structure of each config type. In this repo they live under <code>claude-config/</code>. In your own project, move them to <code>.claude/</code>.</p>
+
+    <a class="doc-card" href="claude-config/skills/example-skill/SKILL.md">
+      <div class="doc-icon patterns">&#x2699;</div>
+      <div class="doc-info">
+        <div class="title">Example Skill</div>
+        <div class="desc">Weekly report generator. Shows inputs, ordered steps, output format, validation, constraints.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+
+    <a class="doc-card" href="claude-config/rules/example-rules.md">
+      <div class="doc-icon checklist">&#x1F4CF;</div>
+      <div class="doc-info">
+        <div class="title">Example Rules</div>
+        <div class="desc">Path-scoped marketing rules. Shows tone, data integrity, brand, and review gates.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+
+    <a class="doc-card" href="claude-config/commands/example-command.md">
+      <div class="doc-icon deck">&#x1F680;</div>
+      <div class="doc-info">
+        <div class="title">Example Command</div>
+        <div class="desc">Publishing command. Shows path validation, content scan, CSS dependency check, push, verify.</div>
+      </div>
+      <span class="doc-arrow">&rsaquo;</span>
+    </a>
+  </div>
+
+  <!-- QUICK START -->
+  <div class="section">
+    <h2><span class="icon">&#x26A1;</span> Quick Start</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Copy <code>CLAUDE.md</code> to your project root. Replace "Acme Analytics" with your company. Fill in your team, rules, agents, and folder structure.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">Create <code>.claude/skills/</code>, <code>.claude/commands/</code>, and <code>.claude/rules/</code> directories. Use the examples as templates.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Run the <a href="docs/audit-checklist.html" style="color:var(--blue);text-decoration:underline;">audit checklist</a> against your system. Fix any red-line failures first.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">Read the <a href="docs/pattern-catalog.html" style="color:var(--blue);text-decoration:underline;">pattern catalog</a> when you hit a design decision. Each pattern links to the CCAF domain it addresses.</div>
+    </div>
+
+    <div class="clone-box">
+      <code>git clone https://github.com/quantdlove/claude-ccaf-starter.git</code>
+      <span class="copy-label">Clone</span>
+    </div>
+  </div>
+
+  <!-- ATTRIBUTION -->
+  <div class="attribution">
+    Built by <a href="https://linkedin.com/in/quantdlove" target="_blank">David Love</a>, Head of Sales &amp; Operations at <a href="https://quiverquant.com" target="_blank">Quiver Quant</a>.<br>
+    Presented at the Capital Factory Claude Ambassador Meetup, Austin TX.<br><br>
+    MIT License. Use it, fork it, make it yours.
+  </div>
+
+</div>
+</body>
+</html>
